@@ -1,2 +1,23 @@
 @charset "utf-8";
 /* CSS Document */
+
+.eCoastStates2 {
+    fill: #FFF;
+    stroke: #CCC;
+    stroke-width: 2px;
+}
+.eCoastStates2 {
+	fill: #ffffbf
+}
+.gratLines {
+    fill: none;
+    stroke: #999;
+    stroke-width: .5px;
+}
+.gratBackground {
+    fill: #91bfdb;
+}
+.map {
+    border: medium solid #999;
+}
+
