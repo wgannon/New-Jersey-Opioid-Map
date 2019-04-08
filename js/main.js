@@ -25,7 +25,7 @@
 			.attr("width", width)
 			.attr("height", height);
 
-		//create Albers equal area conic projection centered on France
+		//create Albers equal area conic projection centered on New Jersey
 		var projection = d3.geo.albers()
 			.center([4, .2])
 			.rotate([80, -40])
@@ -53,8 +53,8 @@
 				counties = topojson.feature(NJCounties, NJCounties.objects.Counties).features;
 
 			var eCoastStates2 = map.append("path") //create SVG path element
-				.datum(topojson.feature(eCoast, eCoast.objects.eastCoast)) //bind countries data to path element
-				.attr("class", "eCoastStates2") //assign class for styling countries
+				.datum(topojson.feature(eCoast, eCoast.objects.eastCoast)) //bind States data to path element
+				.attr("class", "eCoastStates2") //assign class for styling states
 				.attr("d", path); //project data as geometry in svg
 
 			//join csv data to GeoJson
@@ -94,13 +94,16 @@
 		//create a scale to size bars proportionally to frame
 		var yScale = d3.scale.linear()
 			.range([0, chartHeight])
-			.domain([0, 400]);
+			.domain([0, 500]);
 		
 		//set bars for each province
 		var bars = chart.selectAll(".bars")
 			.data(csvData)
 			.enter()
 			.append("rect")
+			.sort(function(a, b){
+				return a[expressed]-b[expressed]
+			})
 			.attr("class", function (d) {
 				return "bars " + d.OBJECTID;
 			})
@@ -146,7 +149,7 @@
 			//Loop through geojson counties to find correct county
 			for (var a = 0; a < counties.length; a++) {
 
-				var geojsonProps = counties[a].properties; //the current region geojson properties
+				var geojsonProps = counties[a].properties; //the current county geojson properties
 				var geojsonKey = geojsonProps.OBJECTID; //the geojson primary key
 
 				//where primary keys match, transfer csv data to geojson properties object
@@ -165,7 +168,7 @@
 
 	}; //end of join data
 	function setEnumerationUnits(counties, map, path, colorScale) {
-		//add NJ Counties regions to map
+		//add NJ Counties to map
 		var njcounties = map.selectAll(".njcounties")
 			.data(counties)
 			.enter()
