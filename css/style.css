@@ -34,3 +34,12 @@ svg {
     float: right;
     margin: 10px 20px 0 0;
 }
+.numbers {
+    fill: white;
+    font-family: sans-serif;
+}
+.chartTitle {
+    font-family: sans-serif;
+    font-size: 1 em;
+    font-weight: bold;
+}

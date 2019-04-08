@@ -3,10 +3,10 @@
 
 //global variables
 (function () {
-	var attrArray = ["Admin_Per100k_2018", "Mortality_Per100k_2018",
-				 "Admin_Per100k_2017", "Mortality_Per100k_2017",
-				 "Admin_Per100k_2016", "Mortality_Per100k_2016",
-				 "Admin_Per100k_2015", "Mortality_Per100k_2015"
+	var attrArray = ["Naloxone Administered in 2018", "Overdose Mortality in 2018",
+				 "Naloxone Administered in 2017", "Overdose Mortality in 2017",
+				 "Naloxone Administered in 2016", "Overdose Mortality in 2016",
+				 "Naloxone Administered in 2015", "Overdose Mortality in 2015"
 				];
 	var expressed = attrArray[0];
 
@@ -94,15 +94,14 @@
 		//create a scale to size bars proportionally to frame
 		var yScale = d3.scale.linear()
 			.range([0, chartHeight])
-			.domain([0, 500]);
-		
+			.domain([0, 600]);
 		//set bars for each province
 		var bars = chart.selectAll(".bars")
 			.data(csvData)
 			.enter()
 			.append("rect")
-			.sort(function(a, b){
-				return a[expressed]-b[expressed]
+			.sort(function (a, b) {
+				return a[expressed] - b[expressed]
 			})
 			.attr("class", function (d) {
 				return "bars " + d.OBJECTID;
@@ -117,9 +116,31 @@
 			.attr("y", function (d) {
 				return chartHeight - yScale(parseFloat(d[expressed]));
 			})
-			.style("fill", function(d){
-            	return choropleth(d, colorScale);
-        	});
+			.style("fill", function (d) {
+				return choropleth(d, colorScale);
+			});
+		//annotate bars with attribute value text
+		var numbers = chart.selectAll(".numbers")
+			.data(csvData)
+			.enter()
+			.append("text")
+			.sort(function (a, b) {
+				return a[expressed] - b[expressed]
+			})
+			.attr("class", function (d) {
+				return "numbers " + d.OBJECTID;
+			})
+			.attr("text-anchor", "middle")
+			.attr("x", function (d, i) {
+				var fraction = chartWidth / csvData.length;
+				return i * fraction + (fraction - 1) / 2;
+			})
+			.attr("y", function (d) {
+				return chartHeight - yScale(parseFloat(d[expressed])) + 15;
+			})
+			.text(function (d) {
+				return d[expressed];
+			});		
 		//create a second svg element to hold the bar chart
 		var chart = d3.select("body")
 			.append("svg")
@@ -127,7 +148,15 @@
 			.attr("height", chartHeight)
 			.attr("class", "chart");
 		console.log(chart)
+		//below Example 2.8...create a text element for the chart title
+		var chartTitle = chart.append("text")
+			.attr("x", 20)
+			.attr("y", 40)
+			.attr("class", "chartTitle")
+			.text("Count of " + expressed+ "per 100k");
+		console.log(expressed)
 	}; //end of set chart
+	
 	function setGraticule(map, path) {
 		var graticule = d3.geo.graticule()
 			.step([1.5, 1.5]); //place graticule lines every 10 degrees of longitude and latitude
