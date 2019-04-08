@@ -1,23 +1,36 @@
 @charset "utf-8";
 /* CSS Document */
 
-.eCoastStates2 {
-    fill: #FFF;
-    stroke: #CCC;
-    stroke-width: 2px;
+
+
+svg {
+	position: absolute;
+	background-color: #D5E3FF
 }
-.eCoastStates2 {
-	fill: #ffffbf
-}
+
 .gratLines {
-    fill: none;
-    stroke: #999;
-    stroke-width: .5px;
-}
-.gratBackground {
-    fill: #91bfdb;
+  fill: none;
+  stroke: #999;
+  stroke-width: 1px;
 }
 .map {
     border: medium solid #999;
+	margin: 10px 0 0 20px;
 }
 
+.eCoastStates2 {
+    fill: #FFF9F3;
+    stroke: #C3C3C3;
+    stroke-width: 1.5px;
+}
+.njcounties {
+    stroke: #000;
+    stroke-width: 0.5px;
+    stroke-linecap: round;	
+}
+.chart {
+    background-color: rgba(128,128,128,.2);
+    border: medium solid #999;
+    float: right;
+    margin: 10px 20px 0 0;
+}
