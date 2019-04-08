@@ -1,8 +1,8 @@
 /* Stylesheet by William D Gannon, 2019 */
 /* For Lab2 Mapping in D3 */
 
-//global variables
 (function () {
+    //global variables
 	var attrArray = ["Naloxone Administered in 2018", "Overdose Mortality in 2018",
 				 "Naloxone Administered in 2017", "Overdose Mortality in 2017",
 				 "Naloxone Administered in 2016", "Overdose Mortality in 2016",
@@ -88,9 +88,11 @@
 		//Example 2.1 line 17...create a second svg element to hold the bar chart
 		var chart = d3.select("body")
 			.append("svg")
+            .attr("class", "chart")
 			.attr("width", chartWidth)
-			.attr("height", chartHeight)
-			.attr("class", "chart");
+			.attr("height", chartHeight);
+        
+        
 		//create a scale to size bars proportionally to frame
 		var yScale = d3.scale.linear()
 			.range([0, chartHeight])
@@ -142,11 +144,6 @@
 				return d[expressed];
 			});		
 		//create a second svg element to hold the bar chart
-		var chart = d3.select("body")
-			.append("svg")
-			.attr("width", chartWidth)
-			.attr("height", chartHeight)
-			.attr("class", "chart");
 		console.log(chart)
 		//below Example 2.8...create a text element for the chart title
 		var chartTitle = chart.append("text")
