@@ -113,7 +113,7 @@
         
 		//create a scale to size bars proportionally to frame
 		var yScale = d3.scale.linear()
-			.range([463, 0])
+			.range([400, 0])
 			.domain([0, 550]);
         
 		//set bars for each province
