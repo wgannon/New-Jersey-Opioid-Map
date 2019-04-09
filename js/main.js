@@ -2,7 +2,7 @@
 /* For Lab2 Mapping in D3 */
 
 (function () {
-    //global variables
+	//global variables
 	var attrArray = ["Naloxone Administered in 2018", "Overdose Mortality in 2018",
 				 "Naloxone Administered in 2017", "Overdose Mortality in 2017",
 				 "Naloxone Administered in 2016", "Overdose Mortality in 2016",
@@ -15,8 +15,8 @@
 	//create a scale to size bars proportionally to frame
 	var yScale = d3.scale.linear()
 		.range([0, chartHeight])
-		.domain([0, 600]);	
-	
+		.domain([0, 600]);
+
 	window.onload = setMap(); //start script once HTML is loaded
 
 
@@ -72,14 +72,16 @@
 
 			//add enumeration units to the map
 			setEnumerationUnits(counties, map, path, colorScale);
-			
+
 			//add coordinated visualizations to map
 			setChart(csvData, colorScale);
 
+			createDropdown(csvData);
+
 		}; //end of callback
-		
+
 	}; //end of setmap
-		//function to create color scale generator
+	//function to create color scale generator
 	function makeColorScale(data) {
 		var colorClasses = [
         "#fef0d9",
@@ -112,7 +114,7 @@
 		//assign array of last 4 cluster minimums as domain
 		colorScale.domain(domainArray);
 		return colorScale;
-	};//End of make c
+	}; //End of make c
 	function choropleth(props, colorScale) {
 		//make sure attribute value is a number
 		var val = parseFloat(props[expressed]);
@@ -123,6 +125,7 @@
 			return "#CCC";
 		};
 	};
+
 	function setGraticule(map, path) {
 		var graticule = d3.geo.graticule()
 			.step([1.5, 1.5]); //place graticule lines every 10 degrees of longitude and latitude
@@ -173,19 +176,22 @@
 			.attr("d", path)
 			.style("fill", function (d) {
 				return choropleth(d.properties, colorScale);
+			})
+			.on("mouseover", function (d) {
+				highlight(d.properties);
 			});
 	}; //end of setEnumerationUnits
-	
+
 	function setChart(csvData, colorScale) {
 		//chart frame dimensions
 
 		//Example 2.1 line 17...create a second svg element to hold the bar chart
 		var chart = d3.select("body")
 			.append("svg")
-            .attr("class", "chart")
+			.attr("class", "chart")
 			.attr("width", chartWidth)
 			.attr("height", chartHeight);
-        
+
 
 		//set bars for each province
 		var bars = chart.selectAll(".bars")
@@ -210,7 +216,9 @@
 			})
 			.style("fill", function (d) {
 				return choropleth(d, colorScale);
-			});
+			})
+			.on("mouseover", highlight);
+
 		//annotate bars with attribute value text
 		var numbers = chart.selectAll(".numbers")
 			.data(csvData)
@@ -228,22 +236,122 @@
 				return i * fraction + (fraction - 1) / 2;
 			})
 			.attr("y", function (d) {
-				return chartHeight - yScale(parseFloat(d[expressed])) +17 ;
+				return chartHeight - yScale(parseFloat(d[expressed])) - 3;
 			})
 			.text(function (d) {
 				return d[expressed];
-			});		
+			});
 		//below Example 2.8...create a text element for the chart title
 		var chartTitle = chart.append("text")
 			.attr("x", 20)
 			.attr("y", 40)
 			.attr("class", "chartTitle")
-			.text("Count of " + expressed+ "per 100k");
+			.text("Count of " + expressed + " per 100,000 people.");
 	}; //end of set chart
-	
+	//function to create a dropdown menu for attribute selection
+	function createDropdown(csvData) {
+		//add select element
+		var dropdown = d3.select("body")
+			.append("select")
+			.attr("class", "dropdown")
+			.on("change", function () {
+				changeAttribute(this.value, csvData)
+			});
+
+		//add initial option
+		var titleOption = dropdown.append("option")
+			.attr("class", "titleOption")
+			.attr("disabled", "true")
+			.text("Select Attribute");
+
+		//add attribute name options
+		var attrOptions = dropdown.selectAll("attrOptions")
+			.data(attrArray)
+			.enter()
+			.append("option")
+			.attr("value", function (d) {
+				return d
+			})
+			.text(function (d) {
+				return d
+			});
+	};
+
+	function changeAttribute(attribute, csvData) {
+		//change the expressed attribute
+		expressed = attribute;
+
+		//recreate the color scale
+		var colorScale = makeColorScale(csvData);
+
+		//recolor enumeration units
+		var njcounties = d3.selectAll(".njcounties")
+			.transition()
+			.duration(1300)
+			.style("fill", function (d) {
+				return choropleth(d.properties, colorScale)
+			});
+		//re-sort, resize, and recolor bars
+		var bars = d3.selectAll(".bars")
+
+			.sort(function (a, b) {
+				return a[expressed] - b[expressed]
+			})
+			.transition()
+			.delay(function (d, i) {
+				return i * 20
+			})
+			.duration(1300)
+			.attr("x", function (d, i) {
+				return i * (chartWidth / csvData.length);
+			})
+			.attr("height", function (d) {
+				return yScale(parseFloat(d[expressed]));
+			})
+			.attr("y", function (d) {
+				return chartHeight - yScale(parseFloat(d[expressed]));
+			})
+			.style("fill", function (d) {
+				return choropleth(d, colorScale);
+			});
+		var numbers = d3.selectAll(".numbers")
+
+			.sort(function (a, b) {
+				return a[expressed] - b[expressed]
+			})
+			.transition()
+			.delay(function (d, i) {
+				return i * 20
+			})
+			.duration(1300)
+			.attr("text-anchor", "middle")
+			.attr("x", function (d, i) {
+				var fraction = chartWidth / csvData.length;
+				return i * fraction + (fraction - 1) / 2;
+			})
+			.attr("y", function (d) {
+				return chartHeight - yScale(parseFloat(d[expressed])) - 3;
+			})
+			.text(function (d) {
+				return d[expressed];
+			});
+		var chartTitle = d3.selectAll(".chartTitle")
+			.attr("x", 20)
+			.attr("y", 40)
+			.attr("class", "chartTitle")
+			.text("Count of " + expressed + " per 100,000 people.");
+	};
+ 	//function to highlight enumeration units and bars-Currently Is in the dom and shows up in the console log as new arrays but not visually
+	function highlight(props){
+		//change stroke
+		var selected = d3.selectAll("." + props.CountyName)
+			.attr("class", "highlighter")
+			.style("stroke", "blue")
+			.style("stroke-width", "6");
+
+		console.log(selected);
+};
 
 
-
-	
 
 })();
