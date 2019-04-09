@@ -1,8 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
 
-
-
 svg {
 	position: absolute;
 	background-color: #D5E3FF
@@ -28,18 +26,43 @@ svg {
     stroke-width: 0.5px;
     stroke-linecap: round;	
 }
-.chart {
-    background-color: rgba(128,128,128,.2);
-    border: medium solid #999;
-    float: right;
-    margin: 10px 20px 0 0;
-}
-.numbers {
+
+/*.numbers {
     fill: white;
     font-family: sans-serif;
+}*/
+.chart {
+    float: right;
+    margin: 7px 20px 0 0;
 }
+
 .chartTitle {
     font-family: sans-serif;
-    font-size: 1 em;
+    font-size: 1.5em;
     font-weight: bold;
+}
+
+.chartBackground {
+    fill: rgba(128,128,128,.2);
+}
+
+.chartFrame {
+    fill: none;
+    stroke: #999;
+    stroke-width: 3px;
+    shape-rendering: crispEdges;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #999;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 0.8em;
+    fill: #999;
 }
