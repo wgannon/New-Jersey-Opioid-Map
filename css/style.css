@@ -4,7 +4,6 @@
 
 
 svg {
-	position: absolute;
 	background-color: #D5E3FF
 }
 
@@ -29,17 +28,21 @@ svg {
     stroke-linecap: round;	
 }
 .chart {
-    background-color: rgba(128,128,128,.2);
+    background-color: #D5E3FF;
     border: medium solid #999;
     float: right;
     margin: 10px 20px 0 0;
 }
 .numbers {
-    fill: white;
-    font-family: sans-serif;
+    fill: black;
+    font-family:serif;
+	font-size: .65em;
+	font-style: normal;
+	font-weight: bold;
 }
 .chartTitle {
-    font-family: sans-serif;
-    font-size: 1 em;
+    font-family:serif ;
+    font-size: 1em;
     font-weight: bold;
 }
+
