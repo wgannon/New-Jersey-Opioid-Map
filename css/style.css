@@ -4,6 +4,7 @@
 
 
 svg {
+	border: medium solid #999;
 	background-color: #D5E3FF
 }
 
@@ -40,10 +41,24 @@ svg {
 	font-style: normal;
 	font-weight: bold;
 }
-.chartTitle {
+/*.chartTitle {
     font-family:serif ;
-    font-size: 1em;
+    font-size: 1.3vw;
     font-weight: bold;
+}*/
+@media screen and (min-width: 651px) {
+  .chartTitle {
+	font-family:serif;
+    font-size: 1.4vw;
+	font-weight: bold;
+  }
+}
+@media screen and (max-width: 650px) {
+  .chartTitle{
+	font-family:serif;
+    font-size: .9vw;
+	font-weight: bold;
+  }
 }
 .chartBackground {
     fill: rgba(128,128,128,.2);

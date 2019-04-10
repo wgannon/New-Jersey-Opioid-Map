@@ -206,8 +206,7 @@
 			.attr("width", chartWidth)
 			.attr("height", chartHeight);
 
-
-		//set bars for each province
+		//set bars for each county
 		var bars = chart.selectAll(".bars")
 			.data(csvData)
 			.enter()
@@ -232,11 +231,12 @@
 				return choropleth(d, colorScale);
 			})
 			.on("mouseover", highlight)
-			.on("mouseout",dehighlight);
-		//Added from review
-		var desc = bars.append("desc")
-			.text('{"stroke": "none", "stroke-width": "0px"}');
-
+			.on("mouseout", dehighlight);
+        
+  
+        var desc = bars.append("desc")
+            .text('{"stroke": "none", "stroke-width": "0px"}');
+        
 		//annotate bars with attribute value text
 		var numbers = chart.selectAll(".numbers")
 			.data(csvData)
@@ -363,9 +363,9 @@
 	function highlight(props){
 		//change stroke
 		var selected = d3.selectAll("." + props.COUNTY)
-			.attr("class", "highlighter")
+			//.attr("class", "highlighter")
 			.style("stroke", "blue")
-			.style("stroke-width", "6");
+			.style("stroke-width", "3px");
 		setLabel(props)
 		//console.log(selected);
 	};
@@ -376,17 +376,21 @@
 			})
 			.style("stroke-width", function(){
 				return getStyle(this, "stroke-width")
-			})};
-	//get style for desc
-		function getStyle(element, styleName){
-			var styleText = d3.select(element)
-                	.select("desc")
-                	.text();
+			});
+        //applu style and lable
+        function getStyle(element, styleName){ 
+            var styleText = d3.select(element)
+                .select("desc")
+                .text();
 
-            		var styleObject = JSON.parse(styleText);
+            var styleObject = JSON.parse(styleText);
 
-            		return styleObject[styleName];
-        	};
+            return styleObject[styleName];
+        };
+        
+        d3.select(".infolabel")
+            .remove();
+    };
 	//function to create dynamic label
 	function setLabel(props){
 		//label content
@@ -402,9 +406,7 @@
 
 		var countyName = infolabel.append("div")
 			.attr("class", "labelname")
-			.html(props.COUNTY_LABEL);
-		console.log(labelAttribute)
-		console.log(infolabel)
+			.html(props.COUNTY);
 	};
 
 })();
