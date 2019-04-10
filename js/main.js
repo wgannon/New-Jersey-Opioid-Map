@@ -177,7 +177,7 @@
 			.enter()
 			.append("path")
 			.attr("class", function (d) {
-				return "njcounties " + d.properties.OBJECTID;
+				return "njcounties " + d.properties.COUNTY;
 			})
 			.attr("d", path)
 			.style("fill", function(d){
@@ -216,7 +216,7 @@
 				return a[expressed] - b[expressed]
 			})
 			.attr("class", function (d) {
-				return "bars " + d.OBJECTID;
+				return "bars " + d.COUNTY;
 			})
 			.attr("width", chartWidth / csvData.length - 1)
 			.attr("x", function (d, i) {
@@ -232,9 +232,10 @@
 				return choropleth(d, colorScale);
 			})
 			.on("mouseover", highlight)
-			.on("mouseout", function(d){
-            	dehighlight(d.properties)
-        	});
+			.on("mouseout",dehighlight);
+		//Added from review
+		var desc = bars.append("desc")
+			.text('{"stroke": "none", "stroke-width": "0px"}');
 
 		//annotate bars with attribute value text
 		var numbers = chart.selectAll(".numbers")
@@ -361,7 +362,7 @@
  	//function to highlight enumeration units and bars-Currently Is in the dom and shows up in the console log as new arrays but not visually
 	function highlight(props){
 		//change stroke
-		var selected = d3.selectAll("." + props.COUNTY_LABEL)
+		var selected = d3.selectAll("." + props.COUNTY)
 			.attr("class", "highlighter")
 			.style("stroke", "blue")
 			.style("stroke-width", "6");
@@ -369,13 +370,23 @@
 		//console.log(selected);
 	};
 	function dehighlight(props){
-		var selected = d3.selectAll("." + props.COUNTY_LABEL)
+		var selected = d3.selectAll("." + props.COUNTY)
 			.style("stroke", function(){
 				return getStyle(this, "stroke")
 			})
 			.style("stroke-width", function(){
 				return getStyle(this, "stroke-width")
 			})};
+	//get style for desc
+		function getStyle(element, styleName){
+			var styleText = d3.select(element)
+                	.select("desc")
+                	.text();
+
+            		var styleObject = JSON.parse(styleText);
+
+            		return styleObject[styleName];
+        	};
 	//function to create dynamic label
 	function setLabel(props){
 		//label content
