@@ -1,4 +1,4 @@
-﻿OBJECTID,COUNTY,COUNTY_LABEL,CO,NJ County,Naloxone_Administered_in_2018,Overdose_Mortality_in_2018,Naloxone_Administered_in_2017,Overdose_Mortality_in_2017,Naloxone_Administered_in_2016,Overdose_Mortality_in_2016,Naloxone_Administered_in_2015,Overdose_Mortality_in_2015
+﻿OBJECTID,COUNTY,COUNTY_LAB,CO,NJ County,Naloxone_Administered_in_2018,Overdose_Mortality_in_2018,Naloxone_Administered_in_2017,Overdose_Mortality_in_2017,Naloxone_Administered_in_2016,Overdose_Mortality_in_2016,Naloxone_Administered_in_2015,Overdose_Mortality_in_2015
 10,HUNTERDON,Hunterdon County,HUN,Hunterdon,47,16,61,18,46,16,46,11
 18,UNION,Union County,UNI,Somerset,55,16,75,16,65,13,41,11
 2,BERGEN,Bergen County,BER,Bergen,62,17,65,14,49,11,35,9
