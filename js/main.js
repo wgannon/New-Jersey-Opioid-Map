@@ -3,10 +3,10 @@
 
 (function () {
 	//global variables
-	var attrArray = ["Naloxone Administered in 2018", "Overdose Mortality in 2018",
-				 "Naloxone Administered in 2017", "Overdose Mortality in 2017",
-				 "Naloxone Administered in 2016", "Overdose Mortality in 2016",
-				 "Naloxone Administered in 2015", "Overdose Mortality in 2015"
+	var attrArray = ["Naloxone_Administered_in_2018", "Overdose_Mortality_in_2018",
+				 "Naloxone_Administered_in_2017", "Overdose_Mortality_in_2017",
+				 "Naloxone_Administered_in_2016", "Overdose_Mortality_in_2016",
+				 "Naloxone_Administered_in_2015", "Overdose_Mortality_in_2015"
 				];
 	var expressed = attrArray[0];
 
@@ -15,7 +15,7 @@
 	//create a scale to size bars proportionally to frame
 	var yScale = d3.scale.linear()
 		.range([0, chartHeight])
-		.domain([0, 600]);
+		.domain([0, 570]);
 
 	window.onload = setMap(); //start script once HTML is loaded
 
@@ -69,18 +69,22 @@
 
 			//create color scale
 			var colorScale = makeColorScale(csvData);
-
+			
+			// add dropdown menu
+			createDropdown(csvData);
+			
 			//add enumeration units to the map
 			setEnumerationUnits(counties, map, path, colorScale);
 
 			//add coordinated visualizations to map
 			setChart(csvData, colorScale);
 
-			createDropdown(csvData);
+			
 
 		}; //end of callback
 
 	}; //end of setmap
+	
 	//function to create color scale generator
 	function makeColorScale(data) {
 		var colorClasses = [
@@ -115,6 +119,8 @@
 		colorScale.domain(domainArray);
 		return colorScale;
 	}; //End of make c
+	
+	
 	function choropleth(props, colorScale) {
 		//make sure attribute value is a number
 		var val = parseFloat(props[expressed]);
@@ -174,12 +180,21 @@
 				return "njcounties " + d.properties.OBJECTID;
 			})
 			.attr("d", path)
-			.style("fill", function (d) {
+			.style("fill", function(d){
+				return colorScale(d.properties[expressed]);
+			})
+			.attr("d", path)
+			.style("fill", function(d) {
 				return choropleth(d.properties, colorScale);
 			})
-			.on("mouseover", function (d) {
+			.on("mouseover", function(d) {
 				highlight(d.properties);
-			});
+			})
+            .on("mouseout", function(d){
+            	dehighlight(d.properties)
+        	});
+		var desc = njcounties.append('desc')
+			.text('{"stroke": "#000", "stroke-width": "0.5px"}');
 	}; //end of setEnumerationUnits
 
 	function setChart(csvData, colorScale) {
@@ -188,7 +203,6 @@
 		//Example 2.1 line 17...create a second svg element to hold the bar chart
 		var chart = d3.select("body")
 			.append("svg")
-			.attr("class", "chart")
 			.attr("width", chartWidth)
 			.attr("height", chartHeight);
 
@@ -217,7 +231,10 @@
 			.style("fill", function (d) {
 				return choropleth(d, colorScale);
 			})
-			.on("mouseover", highlight);
+			.on("mouseover", highlight)
+			.on("mouseout", function(d){
+            	dehighlight(d.properties)
+        	});
 
 		//annotate bars with attribute value text
 		var numbers = chart.selectAll(".numbers")
@@ -344,14 +361,39 @@
  	//function to highlight enumeration units and bars-Currently Is in the dom and shows up in the console log as new arrays but not visually
 	function highlight(props){
 		//change stroke
-		var selected = d3.selectAll("." + props.CountyName)
+		var selected = d3.selectAll("." + props.COUNTY_LABEL)
 			.attr("class", "highlighter")
 			.style("stroke", "blue")
 			.style("stroke-width", "6");
+		setLabel(props)
+		//console.log(selected);
+	};
+	function dehighlight(props){
+		var selected = d3.selectAll("." + props.COUNTY_LABEL)
+			.style("stroke", function(){
+				return getStyle(this, "stroke")
+			})
+			.style("stroke-width", function(){
+				return getStyle(this, "stroke-width")
+			})};
+	//function to create dynamic label
+	function setLabel(props){
+		//label content
+		var labelAttribute = "<h1>" + props[expressed] +
+			"</h1><b>" + expressed + "</b>";
 
-		console.log(selected);
-};
+		//create info label div
+		var infolabel = d3.select("body")
+			.append("div")
+			.attr("class", "infolabel")
+			.attr("id", props.County + "_label")
+			.html(labelAttribute);
 
-
+		var countyName = infolabel.append("div")
+			.attr("class", "labelname")
+			.html(props.COUNTY_LABEL);
+		console.log(labelAttribute)
+		console.log(infolabel)
+	};
 
 })();
