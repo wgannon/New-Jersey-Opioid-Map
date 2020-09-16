@@ -3,7 +3,8 @@
 
 (function () {
 	//global variables
-	var attrArray = ["Naloxone_Administered_in_2018", "Overdose_Mortality_in_2018",
+	var attrArray = ["Naloxone_Administered_in_2019", "Overdose_Mortality_in_2019",
+				"Naloxone_Administered_in_2018", "Overdose_Mortality_in_2018",
 				 "Naloxone_Administered_in_2017", "Overdose_Mortality_in_2017",
 				 "Naloxone_Administered_in_2016", "Overdose_Mortality_in_2016",
 				 "Naloxone_Administered_in_2015", "Overdose_Mortality_in_2015"
