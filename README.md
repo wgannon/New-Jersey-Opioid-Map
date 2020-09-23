@@ -1,4 +1,4 @@
-# https://wgannon.github.io/New-Jersey-Opiod-Map/
+# https://wgannon.github.io/New-Jersey-Opioid-Map/
 
 This is a visualization of the data for NJ Counties of Overdose deaths and naloxone(NARCAN) administration per year
 
